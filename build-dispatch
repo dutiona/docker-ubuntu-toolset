@@ -1,0 +1,147 @@
+#!/bin/bash
+
+set -e
+
+BUILD_DIRECTORY="build-in-docker"
+CMAKE_GENERATOR=""
+COMPILER="gcc"
+FORCE=""
+RELEASE_TYPE="Debug"
+SOURCE_DIRECTORY=".."
+TARGET="all"
+TOOLCHAIN_ARGS=""
+VERBOSE=""
+COVERAGE=""
+USAGE="$(basename "$0") [OPTIONS] -- execute a build toolchain
+
+where:
+    -h --help                       show this help text
+    -c --compiler gcc|clang         select the compiler to use
+                                    default = gcc
+    -g --cmake-generator Generator  use provided cmake generator
+                                    default = Unix Makefiles
+    -b --build-directory Directory  use provided build directory for build artifacts (on host)
+                                    default = build-in-docker
+    -s --source-directory Directory use provided source directory to compile
+                                    default = ..
+    -t --target Target              build target passed to the generated toolchain (make target)
+                                    default = all
+    -r --release-type ReleaseType   build type. Release|Debug|RelWithDebInfo|MinSizeRel
+                                    default = Debug
+
+    -v --verbose                    if passed, enable verbose to underlying commands
+
+    -f --force                      empty build directory to force a full rebuild
+
+    -o --coverage                   run gcovr coverage tool
+
+    --                              end of arguments for script, pass the rest to the toolchain via cmake
+                                    useful for passing -D arguments
+    "
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case $key in
+    -h|--help)
+    echo "$USAGE"
+    exit
+    ;;
+    -f|--force)
+    FORCE="1"
+    shift
+    ;;
+    -v|--verbose)
+    VERBOSE="VERBOSE=1"
+    shift
+    ;;
+    -o|--coverage)
+    COVERAGE="-DWITH_CODE_COVERAGE=ON"
+    shift
+    ;;
+    -c|--compiler)
+    COMPILER="$2"
+    shift 2
+    ;;
+    -g|--cmake-generator)
+    CMAKE_GENERATOR="$2"
+    shift 2
+    ;;
+    -b|--build-directory)
+    BUILD_DIRECTORY="$2"
+    shift 2
+    ;;
+    -s|--source-directory)
+    SOURCE_DIRECTORY="$2"
+    shift 2
+    ;;
+    -t|--target)
+    TARGET="$2"
+    shift 2
+    ;;
+    -r|--release-type)
+    RELEASE_TYPE="$2"
+    shift 2
+    ;;
+    --)
+    shift
+    ;;
+    *)
+    TOOLCHAIN_ARGS="$TOOLCHAIN_ARGS $1"
+    shift
+    ;;
+esac
+done
+
+echo " * Cmake generator : <$CMAKE_GENERATOR>"
+echo " * Build directory : <$BUILD_DIRECTORY>"
+echo " * Source directory : <$SOURCE_DIRECTORY>"
+echo " * Compiler : <$COMPILER>"
+echo " * Target to build : <$TARGET>"
+echo " * Release type : <$RELEASE_TYPE>"
+echo " * Additional toolchain arguments : <$TOOLCHAIN_ARGS>"
+echo " * CMake version"
+cmake --version
+
+if [ "$COMPILER" == "gcc" ] || [ "$COMPILER" == "g++" ]; then
+    echo " * Choosing gcc compiler"
+    g++ --version
+    CMAKE_CC="gcc"
+    CMAKE_CXX="g++"
+fi
+
+if [ "$COMPILER" == "clang" ] || [ "$COMPILER" == "clang++" ]; then
+    echo " * Choosing clang compiler"
+    clang-5.0 --version
+    CMAKE_CC="clang-5.0"
+    CMAKE_CXX="clang++-5.0"
+fi
+
+export CC=$CMAKE_CC
+export CXX=$CMAKE_CXX
+
+mkdir -p $BUILD_DIRECTORY
+
+pushd $BUILD_DIRECTORY
+
+    if [ "$FORCE" != "" ]; then
+        rm -rf ./*
+    fi
+
+    if [ "$VERBOSE" != "" ]; then
+        set -x
+    fi
+
+    if [ "$CMAKE_GENERATOR" != "" ]; then
+        cmake -G $CMAKE_GENERATOR $COVERAGE $SOURCE_DIRECTORY $TOOLCHAIN_ARGS
+        cmake --build . --target $TARGET --config $RELEASE_TYPE
+    else
+        cmake $SOURCE_DIRECTORY $TOOLCHAIN_ARGS
+        cmake --build . --target $TARGET --config $RELEASE_TYPE -- -j 4
+    fi
+
+    if [ "$COVERAGE" != "" ]; then
+        gcovr -r ../include
+    fi
+
+popd
