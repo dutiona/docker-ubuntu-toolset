@@ -18,8 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libboost-all-dev libpoco-dev catch libsdl2-dev libsfml-dev libeigen3-dev libtbb-dev
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    protobuf-compiler protobuf-c-compiler libtinyxml2-dev nlohmann-json-dev doxygen \
-    glew-utils libglew-dev freeglut3-dev imagemagick libmagick++-dev libfreeimage-dev lcov gcovr
+    protobuf-compiler protobuf-c-compiler libtinyxml2-dev nlohmann-json-dev lcov gcovr \
+    glew-utils libglew-dev freeglut3-dev imagemagick libmagick++-dev libfreeimage-dev
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y && rm -rf /var/lib/apt/lists/
 
 # Install python packages
