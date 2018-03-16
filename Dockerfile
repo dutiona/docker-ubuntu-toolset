@@ -10,11 +10,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get update && apt-get dist-upgrade -y && apt-get upgrade -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential binutils git ninja-build cmake bear python python3 python-pip python3-pip \
-    curl wget libcurl4-openssl-dev graphviz vim
+    curl wget libcurl4-openssl-dev graphviz vim doxygen tree
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gcc g++ libgomp1 libpomp-dev
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    clang lldb clang-tidy clang-format lld clang-tools-5.0 python-clang-5.0 python-lldb-5.0
+    clang clang-tidy clang-format lld clang-tools-5.0 \
+    clang-6.0 lldb-6.0 clang-tidy-6.0 clang-format-6.0 lld-6.0 clang-tools-6.0 python-clang-6.0 python-lldb-6.0
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libboost-all-dev libpoco-dev catch libsdl2-dev libsfml-dev libeigen3-dev libtbb-dev
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
