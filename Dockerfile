@@ -9,8 +9,8 @@ ENV LC_ALL C.UTF-8
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get update && apt-get dist-upgrade -y && apt-get upgrade -y
 RUN apt-get install -y \
-    build-essential binutils git ninja-build cmake bear python python3 python-pip python3-pip \
-    curl wget libcurl4-openssl-dev graphviz vim doxygen tree
+    build-essential binutils-dev git ninja-build cmake bear python python3 python-pip python3-pip \
+    curl wget libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev graphviz vim doxygen tree
 RUN apt-get install -y \
     gcc g++ libgomp1 libpomp-dev
 RUN apt-get install -y \
@@ -21,7 +21,11 @@ RUN apt-get install -y \
 RUN apt-get install -y \
     protobuf-compiler protobuf-c-compiler libtinyxml2-dev nlohmann-json-dev lcov gcovr \
     glew-utils libglew-dev freeglut3-dev imagemagick libmagick++-dev libfreeimage-dev
-RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y && rm -rf /var/lib/apt/lists/
+RUN apt-get update && apt-get upgrade -y
+
+# Clean
+RUN apt-get autoremove -y && apt-get autoclean -y
+# RUN rm -rf /var/lib/apt/lists/
 
 # Install python packages
 RUN echo y | pip install -U pip six wheel setuptools
@@ -56,6 +60,14 @@ WORKDIR /tmp/GSL/build
 RUN cmake -G Ninja -DCMAKE_CXX_FLAGS=-Wno-error=sign-conversion .. && cmake --build . --config Release && ctest -C Release && ninja install
 WORKDIR /tmp
 RUN rm -rf /tmp/GSL
+
+# Kcov
+WORKDIR /tmp
+RUN git clone https://github.com/SimonKagstrom/kcov.git
+WORKDIR /tmp/kcov/build
+RUN cmake -G Ninja .. && cmake --build . --config Release && ninja install
+WORKDIR /tmp
+RUN rm -rf /tmp/kcov
 
 WORKDIR /workspace
 
