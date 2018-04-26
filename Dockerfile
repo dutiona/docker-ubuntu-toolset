@@ -36,38 +36,6 @@ RUN echo y | pip3 install scan-build conan \
     numpy scipy requests scrapy nltk sympy \
     pillow sqlalchemy twisted matplotlib pyglet
 
-# VCPKG
-WORKDIR /opt
-RUN git clone https://github.com/Microsoft/vcpkg
-WORKDIR /opt/vcpkg
-RUN ./bootstrap-vcpkg.sh
-
-# VCPKG packages
-WORKDIR /opt/vcpkg
-RUN ./vcpkg install gtest:x64-linux
-RUN ./vcpkg install benchmark:x64-linux
-RUN ./vcpkg install ms-gsl:x64-linux
-RUN ./vcpkg install catch:x64-linux catch2:x64-linux
-RUN ./vcpkg install sdl2:x64-linux
-RUN ./vcpkg install eigen3:x64-linux
-RUN ./vcpkg install protobuf:x64-linux
-RUN ./vcpkg install tinyxml2:x64-linux
-RUN ./vcpkg install rapidjson:x64-linux
-RUN ./vcpkg install nlohmann-json:x64-linux
-RUN ./vcpkg install glew:x64-linux
-RUN ./vcpkg install itk:x64-linux
-
-# does not work :(
-# RUN ./vcpkg install boost:x64-linux
-# RUN ./vcpkg install poco:x64-linux
-# RUN ./vcpkg install freeglut:x64-linux
-# RUN ./vcpkg install freeimage:x64-linux
-# RUN ./vcpkg install allegro5:x64-linux
-# RUN ./vcpkg install vtk:x64-linux
-# RUN ./vcpkg install tbb:x64-linux
-# RUN ./vcpkg install sfml:x64-linux
-RUN rm -rf /buildtrees/*
-
 # Kcov
 WORKDIR /tmp
 RUN git clone https://github.com/SimonKagstrom/kcov.git
