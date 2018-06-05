@@ -44,13 +44,8 @@ RUN cmake -G Ninja .. && cmake --build . --config Release && ninja install
 WORKDIR /tmp
 RUN rm -rf /tmp/kcov
 
-# Google Test
-WORKDIR /tmp
-RUN git clone https://github.com/google/googletest.git
-WORKDIR /tmp/googletest/build
-RUN cmake -G Ninja .. && cmake --build . --config Release && ninja install
-WORKDIR /tmp
-RUN rm -rf /tmp/googletest
+WORKDIR /root/.conan/profiles
+COPY conan-profiles/* ./
 
 # Google Benchmark
 WORKDIR /tmp
