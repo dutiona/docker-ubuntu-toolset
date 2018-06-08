@@ -47,22 +47,6 @@ RUN rm -rf /tmp/kcov
 WORKDIR /root/.conan/profiles
 COPY conan-profiles/* ./
 
-# Google Benchmark
-WORKDIR /tmp
-RUN git clone https://github.com/google/benchmark.git && git clone https://github.com/google/googletest.git /tmp/benchmark/googletest
-WORKDIR /tmp/benchmark/build
-RUN cmake -G Ninja .. && cmake --build . --config Release && ninja install
-WORKDIR /tmp
-RUN rm -rf /tmp/benchmark
-
-# GSL
-WORKDIR /tmp
-RUN git clone https://github.com/Microsoft/GSL.git
-WORKDIR /tmp/GSL/build
-RUN cmake -G Ninja -DCMAKE_CXX_FLAGS=-Wno-error=sign-conversion .. && cmake --build . --config Release && ctest -C Release && ninja install
-WORKDIR /tmp
-RUN rm -rf /tmp/GSL
-
 WORKDIR /workspace
 
 CMD ["/bin/bash"]
