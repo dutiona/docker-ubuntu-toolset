@@ -12,7 +12,7 @@ RUN apt-get install -y \
     build-essential binutils-dev git ninja-build cmake bear python python3 python-pip python3-pip \
     curl wget libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev graphviz vim doxygen tree unzip
 RUN apt-get install -y \
-    gcc g++ libgomp1 libpomp-dev lcov gcovr
+    gcc g++ libgomp1 libpomp-dev lcov gcovr gcc-8 g++-8
 RUN apt-get install -y \
     clang clang-tidy clang-format clang-tools lld lldb python-clang-6.0 python-lldb-6.0
 # To delete once vcpkg works
