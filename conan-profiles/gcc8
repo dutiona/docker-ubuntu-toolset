@@ -4,9 +4,9 @@ os_build=Linux
 arch=x86_64
 arch_build=x86_64
 compiler=gcc
-compiler.version=7
+compiler.version=8
 compiler.libcxx=libstdc++11
-build_type=Debug
+build_type=Release
 cppstd=gnu17
 
 [options]
@@ -14,5 +14,5 @@ cppstd=gnu17
 [build_requires]
 
 [env]
-CC=/usr/bin/gcc-7
-CXX=/usr/bin/g++-7
+CC=/usr/bin/gcc-8
+CXX=/usr/bin/g++-8

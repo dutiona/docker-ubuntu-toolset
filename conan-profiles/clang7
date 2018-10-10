@@ -6,7 +6,7 @@ arch_build=x86_64
 compiler=clang
 compiler.version=6.0
 compiler.libcxx=libstdc++11
-build_type=Debug
+build_type=Release
 cppstd=gnu17
 
 [options]
@@ -14,5 +14,5 @@ cppstd=gnu17
 [build_requires]
 
 [env]
-CC=/usr/bin/clang-6.0
-CXX=/usr/bin/clang++-6.0
+CC=/usr/bin/clang-7
+CXX=/usr/bin/clang++-7
