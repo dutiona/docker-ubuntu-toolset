@@ -12,9 +12,9 @@ RUN apt-get install -y \
   build-essential binutils-dev git ninja-build cmake bear python python3 python-pip python3-pip \
   curl wget libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev graphviz vim doxygen tree unzip
 RUN apt-get install -y \
-  gcc g++ libgomp1 libpomp-dev lcov gcovr gcc-8 g++-8
+  gcc g++ gcc-7 g++-7 gcc-8 g++-8 libgomp1 libpomp-dev lcov gcovr
 RUN apt-get install -y \
-  clang clang-tidy clang-format clang-tools lld lldb python-clang-6.0 python-lldb-6.0
+  clang clang-6.0 clang-7 clang-tidy clang-format clang-tools lld lldb
 # To delete once vcpkg works
 RUN apt-get install -y \
   libsfml-dev libtbb-dev imagemagick libmagick++-dev libboost-all-dev libpoco-dev \
