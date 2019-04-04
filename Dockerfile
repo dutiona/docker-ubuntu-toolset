@@ -27,11 +27,11 @@ RUN apt-get autoremove -y && apt-get autoclean -y
 # RUN rm -rf /var/lib/apt/lists/
 
 # Install python packages
-RUN echo y | pip install -U pip six wheel setuptools
+RUN echo y | pip install -U pip six wheel setuptools pytest
 RUN echo y | pip install scan-build conan \
   numpy scipy requests scrapy scapy nltk sympy \
   pillow sqlalchemy beautifulsoup twisted matplotlib pyglet
-RUN echo y | pip3 install -U pip six wheel setuptools
+RUN echo y | pip3 install -U pip six wheel setuptools pytest
 RUN echo y | pip3 install scan-build conan \
   numpy scipy requests scrapy nltk sympy \
   pillow sqlalchemy twisted matplotlib pyglet
